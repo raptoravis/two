@@ -30,6 +30,7 @@ void xx_loader_gltf(Shell& app, Widget& parent, Dockbar& dockbar, bool init)
 
 		Texture& texture = *app.m_gfx.textures().file("cube/bridge.jpg.cube");
 		scene.m_env.m_radiance.m_texture = &texture;
+		//scene.m_env.m_radiance.m_filter = false;
 		scene.m_env.m_background.m_texture = &texture;
 		scene.m_env.m_background.m_mode = BackgroundMode::Panorama;
 

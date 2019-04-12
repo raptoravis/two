@@ -42,7 +42,7 @@ void xx_refraction_balls(Shell& app, Widget& parent, Dockbar& dockbar, bool init
 
 		Material& material = app.m_gfx.materials().create("balls", [&](Material& m) {
 			m.m_program = &phong;
-			m.m_phong.m_refraction = 0.95f;
+			m.m_lit.m_refraction = 0.95f;
 		});
 
 		spheres.clear();

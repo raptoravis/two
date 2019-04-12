@@ -312,7 +312,6 @@ namespace mud
 		, m_block_depth(block_depth)
 		, m_block_light(block_light)
 	{
-		m_options = { "CSM_SHADOW" };
 		m_modes = { "PCF_LEVEL" };
 
 		//m_pcf_level = PCF_HARD;
@@ -501,11 +500,7 @@ namespace mud
 
 		program.set_mode(m_index, PCF_LEVEL, uint8_t(m_pcf_level));
 
-		//if(direct && light->m_shadows)
-		//{
-		//	program.set_option(m_index, CSM_SHADOW);
-		//	//program.set_option(m_index, CSM_BLEND, light->m_shadow_blend_splits);
-		//}
+		//program.set_option(m_index, CSM_BLEND, light->m_shadow_blend_splits);
 	}
 
 	void BlockShadow::submit(Render& render, const Pass& pass) const

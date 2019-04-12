@@ -9,14 +9,14 @@ void main()
     AlphaMaterial matalpha = read_alpha_material(material_index);
     SolidMaterial matsolid = read_solid_material(material_index);
 
+    vec2 uv = v_uv0;
 #include "fs_alpha.sh"
 #include "fs_alphatest.sh"
     
     vec4 color_tex = toLinear(texture2D(s_color, v_uv0));
     color_tex.a *= alpha;
-#ifdef VERTEX_COLOR
-    gl_FragColor = v_color * color_tex * matsolid.color;
-#else
-    gl_FragColor = color_tex * matsolid.color;
-#endif
+    if(u_vertex_color)
+        gl_FragColor = v_color * color_tex * matsolid.color;
+    else
+        gl_FragColor = color_tex * matsolid.color;
 }

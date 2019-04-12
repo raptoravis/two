@@ -16,7 +16,6 @@ namespace mud
 {
 	enum ShaderOptionRadiance : unsigned int
 	{
-		RADIANCE_ENVMAP,
 		RADIANCE_CUBE,
 	};
 
@@ -40,9 +39,11 @@ namespace mud
 		{
 			void createUniforms()
 			{
-				s_radiance = bgfx::createUniform("s_radiance", bgfx::UniformType::Sampler, 1U, bgfx::UniformSet::View);
+				u_radiance_opts = bgfx::createUniform("u_radiance_opts", bgfx::UniformType::Vec4,    1U, bgfx::UniformSet::View);
+				s_radiance      = bgfx::createUniform("s_radiance",      bgfx::UniformType::Sampler, 1U, bgfx::UniformSet::View);
 			}
 
+			bgfx::UniformHandle u_radiance_opts;
 			bgfx::UniformHandle s_radiance;
 
 		} u_radiance;

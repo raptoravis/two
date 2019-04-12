@@ -2263,7 +2263,6 @@ namespace mud
 			{ t, offsetof(mud::MaterialPbr, m_clearcoat_gloss), type<float>(), "clearcoat_gloss", nullptr, Member::Value, nullptr },
 			{ t, offsetof(mud::MaterialPbr, m_anisotropy), type<mud::MaterialParam<float>>(), "anisotropy", nullptr, Member::Value, nullptr },
 			{ t, offsetof(mud::MaterialPbr, m_subsurface), type<mud::MaterialParam<float>>(), "subsurface", nullptr, Member::Value, nullptr },
-			{ t, offsetof(mud::MaterialPbr, m_refraction), type<mud::MaterialParam<float>>(), "refraction", nullptr, Member::Value, nullptr },
 			{ t, offsetof(mud::MaterialPbr, m_depth), type<mud::MaterialParam<float>>(), "depth", &depth_default, Member::Value, nullptr },
 			{ t, offsetof(mud::MaterialPbr, m_transmission), type<mud::MaterialParam<mud::Colour>>(), "transmission", nullptr, Member::Value, nullptr },
 			{ t, offsetof(mud::MaterialPbr, m_deep_parallax), type<bool>(), "deep_parallax", &deep_parallax_default, Member::Value, nullptr },
@@ -2284,7 +2283,6 @@ namespace mud
 		static mud::MaterialParam<mud::Colour> specular_default = {rgb(0x111111),nullptr};
 		static mud::MaterialParam<float> shininess_default = {30.f,nullptr};
 		static mud::MaterialParam<float> reflectivity_default = {1.f,nullptr};
-		static mud::MaterialParam<float> refraction_default = {0.f,nullptr};
 		static mud::PhongEnvBlendMode env_blend_default = mud::PhongEnvBlendMode::Mul;
 		static bool toon_default = false;
 		// constructors
@@ -2301,7 +2299,6 @@ namespace mud
 			{ t, offsetof(mud::MaterialPhong, m_specular), type<mud::MaterialParam<mud::Colour>>(), "specular", &specular_default, Member::Value, nullptr },
 			{ t, offsetof(mud::MaterialPhong, m_shininess), type<mud::MaterialParam<float>>(), "shininess", &shininess_default, Member::Value, nullptr },
 			{ t, offsetof(mud::MaterialPhong, m_reflectivity), type<mud::MaterialParam<float>>(), "reflectivity", &reflectivity_default, Member::Value, nullptr },
-			{ t, offsetof(mud::MaterialPhong, m_refraction), type<mud::MaterialParam<float>>(), "refraction", &refraction_default, Member::Value, nullptr },
 			{ t, offsetof(mud::MaterialPhong, m_env_blend), type<mud::PhongEnvBlendMode>(), "env_blend", &env_blend_default, Member::Value, nullptr },
 			{ t, offsetof(mud::MaterialPhong, m_toon), type<bool>(), "toon", &toon_default, Member::Value, nullptr }
 		};

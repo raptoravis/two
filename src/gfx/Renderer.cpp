@@ -122,14 +122,16 @@ namespace mud
 
 	void Render::set_uniforms(const Pass& pass) const
 	{
-		vec4 render_p0 = { m_frame->m_time, float(bgfx::getCaps()->originBottomLeft), 0.f, 0.f };
+		const vec4 rect = m_rect * vec2(m_fbo->m_size);
+
+		const bool vflip = m_vflip && bgfx::getCaps()->originBottomLeft;
+		const bool mrt = m_is_mrt;
+
+		vec4 render_p0 = { m_frame->m_time, float(vflip), float(mrt), 0.f };
 		bgfx::setViewUniform(pass.m_index, s_render_uniform.u_render_p0, &render_p0);
 
-		if(m_target)
-		{
-			vec4 screen_p0 = { vec2(m_target->m_size), 1.0f / vec2(m_target->m_size) };
-			bgfx::setViewUniform(pass.m_index, s_render_uniform.u_viewport_p0, &screen_p0);
-		}
+		vec4 screen_p0 = { rect.size, 1.0f / rect.size };
+		bgfx::setViewUniform(pass.m_index, s_render_uniform.u_viewport_p0, &screen_p0);
 
 		vec4 camera_p0 = { m_camera->m_near, m_camera->m_far, m_camera->m_fov, m_camera->m_aspect };
 		bgfx::setViewUniform(pass.m_index, s_render_uniform.u_camera_p0, &camera_p0);
@@ -247,7 +249,7 @@ namespace mud
 
 	void DrawElement::set_program(const Program& program)
 	{
-		m_program = m_material->program(program, *m_item, *m_elem);
+		m_program = { program };
 	}
 
 	struct DrawPass
@@ -260,24 +262,15 @@ namespace mud
 		//for(GfxBlock* block : m_gfx.m_renderer.m_pass_blocks[pass.m_pass_type])
 		//	if(block->m_draw_block)
 		//		((DrawBlock*)block)->options(render, version);
-
-		version.set_option(0, BUFFER_ZONES, ZONES_BUFFER);
-		version.set_option(0, BUFFER_LIGHTS, LIGHTS_BUFFER);
-		version.set_option(0, BUFFER_MATERIALS, MATERIALS_BUFFER);
 	}
 
 	void Renderer::element_options(Render& render, Pass& pass, DrawElement& element)
 	{
 		this->shader_options(render, pass, element.m_program);
 
-		element.m_program.set_option(0, VFLIP, render.m_vflip && bgfx::getCaps()->originBottomLeft);
-		element.m_program.set_option(0, MRT, render.m_is_mrt);
-
 		element.m_program.set_option(0, INSTANCING, element.m_item->m_batch != nullptr);
-		element.m_program.set_option(0, BILLBOARD, element.m_item->m_flags & ItemFlag::Billboard);
 		element.m_program.set_option(0, SKELETON, element.m_skin != nullptr);
 		element.m_program.set_option(0, MORPHTARGET, element.m_item->m_rig && !element.m_item->m_rig->m_morphs.empty());
-		element.m_program.set_option(0, QNORMALS, element.m_elem->m_mesh->m_qnormals);
 
 		Program& program = *const_cast<Program*>(element.m_program.m_program);
 		element.m_bgfx_program = program.version(element.m_program);
@@ -382,8 +375,17 @@ namespace mud
 		if(submit)
 			submit(m_gfx, render, pass, element);
 
+		//bool instancing = element.m_item->m_batch != nullptr;
+		bool billboard = element.m_item->m_flags & ItemFlag::Billboard;
+		//bool skeleton = element.m_skin != nullptr;
+		//bool morphtarget = element.m_item->m_rig && !element.m_item->m_rig->m_morphs.empty();
+		bool qnormals = element.m_elem->m_mesh->m_qnormals;
+
+		vec4 opts = vec4(bvec4(billboard, qnormals, false, false));
+		encoder.setUniform(u_render_opts, &opts);
+
 		uint64_t render_state = 0 | pass.m_bgfx_state | element.m_bgfx_state;
-		element.m_material->submit(*element.m_program.m_program, encoder, render_state, element.m_skin);
+		element.m_material->submit(*element.m_program.m_program, *element.m_item, *element.m_elem, encoder, render_state);
 		element.m_item->submit(encoder, render_state, *element.m_elem);
 
 		encoder.setGroup(bgfx::UniformSet::Group, element.m_material->m_index);

@@ -131,15 +131,11 @@ namespace mud
 		void draw_image_stretch(const Image& image, const vec4& rect, const vec2& stretch = { 1.f, 1.f });
 		void draw_skin_image(const Frame& frame, int section, vec4 rect);
 
-		void log_FPS();
-
 	protected:
 		Vg& m_vg;
 		size_t m_debug_batch = 0;
 
 		struct Impl;
 		unique<Impl> m_impl;
-
-		Clock m_clock;
 	};
 }

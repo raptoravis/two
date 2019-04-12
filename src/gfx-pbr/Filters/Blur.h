@@ -11,12 +11,6 @@
 
 namespace mud
 {
-	enum ShaderOptionBlur : unsigned int
-	{
-		GAUSSIAN_HORIZONTAL,
-		GAUSSIAN_VERTICAL,
-	};
-
 	struct EffectBlurUniform
 	{
 		void createUniforms()

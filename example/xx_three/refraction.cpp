@@ -57,7 +57,7 @@ void xx_refraction_mesh(Shell& app, Widget& parent, Dockbar& dockbar, bool init)
 			return app.m_gfx.materials().create(name, [&](Material& m) {
 				m.m_program = &phong;
 				m.m_phong.m_diffuse = colour;
-				m.m_phong.m_refraction = refraction;
+				m.m_lit.m_refraction = refraction;
 				m.m_phong.m_reflectivity = reflectivity;
 			});
 		};

@@ -14,12 +14,6 @@
 
 namespace mud
 {
-	enum ShaderOptionShadow : unsigned int
-	{
-		CSM_SHADOW,
-		CSM_BLEND,
-	};
-
 	enum ShaderModeShadow : unsigned int
 	{
 		PCF_LEVEL,

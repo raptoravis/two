@@ -4,20 +4,26 @@
     PhongMaterial matphong = read_phong_material(material_index);
     UserMaterial  matuser  = read_user_material(material_index);
 
-#include "fs_depth.sh"
+//#include "fs_depth.sh"
 
     vec2 uv = fragment.uv;
 #include "fs_alpha.sh"
 #include "fs_alphatest.sh"
 
-    matphong.diffuse *= sample_material_texture(s_diffuse, fragment.uv).rgb;
-    matphong.specular *= sample_material_texture(s_specular, fragment.uv).rgb;
-    matphong.shininess *= sample_material_texture(s_shininess, fragment.uv).r;
+    if(u_diffuse_map)
+        matphong.diffuse *= sample_material_texture(s_diffuse, fragment.uv).rgb;
 
-#ifdef VERTEX_COLOR
-    matphong.diffuse *= v_color.rgb;
-    alpha *= v_color.a;
-#endif
+    if(u_specular_map)
+        matphong.specular *= sample_material_texture(s_specular, fragment.uv).rgb;
+
+    if(u_shininess_map)
+        matphong.shininess *= sample_material_texture(s_shininess, fragment.uv).r;
+
+    if(u_vertex_color)
+    {
+        matphong.diffuse *= v_color.rgb;
+        alpha *= v_color.a;
+    }
 
 #include "fs_normal.sh"
 #include "fs_emission.sh"
