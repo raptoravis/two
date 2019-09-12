@@ -73,8 +73,10 @@ namespace two
 
 		printf("[info] gfx - bgfx::init\n");
 		bgfx::Init params = {};
-		params.type = bgfx::RendererType::OpenGL;
-		//params.type = bgfx::RendererType::Direct3D11;
+
+		// TODO: HACK: use dx11
+		//params.type = bgfx::RendererType::OpenGL;
+		params.type = bgfx::RendererType::Direct3D11;
 		params.resolution.width = uint32_t(context.m_size.x);
 		params.resolution.height = uint32_t(context.m_size.y);
 		params.resolution.reset = BGFX_RESET_NONE;
